@@ -15,58 +15,10 @@
         </ul>
       </div>
       <div class="city_sort">
-        <div>
-          <h2>A</h2>
+        <div v-for="(city,index) in cities" :key=index >
+          <h2>{{city.fistN}}</h2>
           <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
-          </ul>
-        </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
-          </ul>
-        </div>
-        <div>
-          <h2>A</h2>
-          <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
-          </ul>
-        </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
-          </ul>
-        </div>
-        <div>
-          <h2>A</h2>
-          <ul>
-            <li>阿拉善盟</li>
-            <li>鞍山</li>
-            <li>安庆</li>
-            <li>安阳</li>
-          </ul>
-        </div>
-        <div>
-          <h2>B</h2>
-          <ul>
-            <li>北京</li>
-            <li>保定</li>
-            <li>蚌埠</li>
-            <li>包头</li>
+            <li>{{city.name}}</li>
           </ul>
         </div>
       </div>
@@ -84,8 +36,56 @@
 </template>
 
 <script>
+import {reqGetCityList} from '@/api'
+import {codefans_net_CC2PY} from  '@/tools/PinYin.js'
 export default {
   name: "City",
+  data(){
+    return {
+      cities: [],
+      ccitysort: []
+    }
+  },
+  async mounted(){
+    //1.通过聚合平台接口API调用
+    // this.$axios.get('/xzqh/query?fid=0&key=eacc450fabf1d3d029ddd6a411d52c81').then(res =>{
+    //   console.log(res)
+    // },res =>{
+    //   console.log(res.message);
+    // })
+
+    //2.通过vue.config.js  before(pp)调用模拟数据
+    // try {
+    //   const result = await this.$axios.get('/citylist')
+    //   console.log(result);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
+    //3通过mock模拟数据接口调用城市数据
+    const result = await reqGetCityList()
+    if (result.data.code == 200) {
+      this.cities =  result.data.data.cities
+      this.cities.forEach(item => {
+        //定义第一个字母
+        var firstName = item.name.substring(0,1)
+        var firstLetter = codefans_net_CC2PY(firstName).substring(0,1).toUpperCase()
+        this.$set(item,'fistN',firstLetter)
+      });
+    }else{
+      console.log(result);
+    }
+
+    this.cities.sort((n1,n2)=>{
+      if (n1.fistN>n2.fistN) {
+        return 1
+      }else if (n1.fistN<n2.fistN) {
+        return -1
+      }else{
+        return 0
+      }
+    })
+  }
 };
 </script>
 
