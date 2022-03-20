@@ -2,94 +2,56 @@
   <div>
     <div class="movie_body">
       <ul>
-        <li>
-          <div class="pic_show"><img src="/images/movie_1.jpg" /></div>
+        <li v-for="commovie in comingMovies" :key="commovie.id" >
+          <div class="pic_show"><img :src="commovie.img" /></div>
           <div class="info_list">
-            <h2>无名之辈</h2>
-            <p><span class="person">17746</span> 人想看</p>
-            <p>主演: 陈建斌,任素汐,潘斌龙</p>
-            <p>2018-11-30上映</p>
+            <h2>{{commovie.nm}}</h2>
+            <p><span class="person">{{commovie.wish}}</span> 人想看</p>
+            <p>主演: {{commovie.star}}</p>
+            <p>{{commovie.showInfo}}</p>
           </div>
           <div class="btn_pre">预售</div>
         </li>
-        <li>
-          <div class="pic_show"><img src="/images/movie_2.jpg" /></div>
+        <!-- <li v-for="(commovie,index) in hotVedio" :key="index" >
+          <div class="pic_show"><img :src="commovie.item_cover" /></div>
           <div class="info_list">
-            <h2>毒液：致命守护者</h2>
-            <p><span class="person">2346</span> 人想看</p>
-            <p>主演: 汤姆·哈迪,米歇尔·威廉姆斯,里兹·阿迈德</p>
-            <p>2018-11-30上映</p>
+            <h2>{{commovie.title}}</h2>
+            <p><span class="person">{{commovie.hot_value}}</span> 热度℃</p>
+            <p>主演: {{commovie.author}}</p>
+            <p>{{commovie.comment_count}}评论数</p>
           </div>
-          <div class="btn_pre">预售</div>
-        </li>
-        <li>
-          <div class="pic_show"><img src="/images/movie_1.jpg" /></div>
-          <div class="info_list">
-            <h2>无名之辈</h2>
-            <p><span class="person">17746</span> 人想看</p>
-            <p>主演: 陈建斌,任素汐,潘斌龙</p>
-            <p>2018-11-30上映</p>
-          </div>
-          <div class="btn_pre">预售</div>
-        </li>
-        <li>
-          <div class="pic_show"><img src="/images/movie_2.jpg" /></div>
-          <div class="info_list">
-            <h2>毒液：致命守护者</h2>
-            <p><span class="person">2346</span> 人想看</p>
-            <p>主演: 汤姆·哈迪,米歇尔·威廉姆斯,里兹·阿迈德</p>
-            <p>2018-11-30上映</p>
-          </div>
-          <div class="btn_pre">预售</div>
-        </li>
-        <li>
-          <div class="pic_show"><img src="/images/movie_1.jpg" /></div>
-          <div class="info_list">
-            <h2>无名之辈</h2>
-            <p><span class="person">17746</span> 人想看</p>
-            <p>主演: 陈建斌,任素汐,潘斌龙</p>
-            <p>2018-11-30上映</p>
-          </div>
-          <div class="btn_pre">预售</div>
-        </li>
-        <li>
-          <div class="pic_show"><img src="/images/movie_2.jpg" /></div>
-          <div class="info_list">
-            <h2>毒液：致命守护者</h2>
-            <p><span class="person">2346</span> 人想看</p>
-            <p>主演: 汤姆·哈迪,米歇尔·威廉姆斯,里兹·阿迈德</p>
-            <p>2018-11-30上映</p>
-          </div>
-          <div class="btn_pre">预售</div>
-        </li>
-        <li>
-          <div class="pic_show"><img src="/images/movie_1.jpg" /></div>
-          <div class="info_list">
-            <h2>无名之辈</h2>
-            <p><span class="person">17746</span> 人想看</p>
-            <p>主演: 陈建斌,任素汐,潘斌龙</p>
-            <p>2018-11-30上映</p>
-          </div>
-          <div class="btn_pre">预售</div>
-        </li>
-        <li>
-          <div class="pic_show"><img src="/images/movie_2.jpg" /></div>
-          <div class="info_list">
-            <h2>毒液：致命守护者</h2>
-            <p><span class="person">2346</span> 人想看</p>
-            <p>主演: 汤姆·哈迪,米歇尔·威廉姆斯,里兹·阿迈德</p>
-            <p>2018-11-30上映</p>
-          </div>
-          <div class="btn_pre">预售</div>
-        </li>
+          <div class="btn_pre"><a :href="commovie.share_url">播放</a></div>
+        </li> -->
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+import {comingRequests,juheRequests} from '@/api'
+
 export default {
-  name:'ComingSoon'
+  name:'ComingSoon',
+  data(){
+    return {
+      comingMovies: {},
+      hotVedio: []
+    }
+  },
+  async mounted(){
+    await comingRequests().then(req=>{
+      console.log(req)
+      this.comingMovies = req.data.coming
+    },res=>{
+      console.log(res)
+    })
+    // await juheRequests().then(req=>{
+    //   console.log(req)  
+    //   this.hotVedio = req.data.result
+    // },res=>{
+    //   console.log(res)
+    // })
+  },
 };
 </script>
 
